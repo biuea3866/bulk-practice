@@ -1,0 +1,19 @@
+package com.example.apiserver.infrastructure.entity
+
+import java.time.ZonedDateTime
+import javax.persistence.*
+
+@Entity
+@Table(name = "BulkRequestLog")
+class BulkRequestLog(
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    val id: Long,
+
+    @Column(name = "start_date")
+    val startDate: ZonedDateTime,
+
+    @Column(name = "end_date")
+    val endDate: ZonedDateTime?,
+) {
+}
