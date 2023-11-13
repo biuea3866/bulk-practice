@@ -14,12 +14,14 @@ class BulkProcessApplication(
     fun bulkProcess(
         requestLogId: Long,
         applicantId: Int,
-        sequenceIdx: Int
+        sequenceIdx: Int,
+        end: Boolean
     ) {
         bulkProcessService.execute(
             requestLogId = requestLogId,
             applicantId = applicantId,
-            sequenceIdx = sequenceIdx
+            sequenceIdx = sequenceIdx,
+            end = end
         )
     }
 
@@ -28,13 +30,15 @@ class BulkProcessApplication(
         requestLogId: Long,
         applicantId: Int,
         sequenceIdx: Int,
-        failReason: String?
+        failReason: String?,
+        end: Boolean
     ) {
         failProcessService.execute(
             requestLogId = requestLogId,
             applicantId = applicantId,
             sequenceIdx = sequenceIdx,
-            failReason = failReason
+            failReason = failReason,
+            end = end
         )
     }
 }

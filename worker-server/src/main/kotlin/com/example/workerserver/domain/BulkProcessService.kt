@@ -14,18 +14,25 @@ class BulkProcessService(
     fun execute(
         requestLogId: Long,
         applicantId: Int,
-        sequenceIdx: Int
+        sequenceIdx: Int,
+        end: Boolean
     ) {
-        bulkProcessLogRepository.save(
-            BulkProcessLog(
-                id = 0,
-                bulkActionRequestId = requestLogId,
-                sequenceIdx = sequenceIdx,
-                failureReason = null,
-                success = true,
-                startDate = ZonedDateTime.now(),
-                endDate = ZonedDateTime.now()
-            )
+        val processLog = BulkProcessLog(
+            id = 0,
+            bulkActionRequestId = requestLogId,
+            sequenceIdx = sequenceIdx,
+            failureReason = null,
+            success = true,
+            startDate = ZonedDateTime.now(),
+            endDate = null
         )
+
+        if (sequenceIdx % 10 == 0) {
+            redisPublisher.publish()
+        }
+
+        if (end) redisPublisher.publish()
+
+        bulkProcessLogRepository.save(processLog.end())
     }
 }

@@ -11,13 +11,17 @@ class KafkaPublisher(
     private val kafkaTemplate: KafkaTemplate<String, Any>
 ) {
     fun publish(
-        requestLog: BulkRequestLog,
-        applicantId: Int
+        requestLogId: Long,
+        applicantId: Int,
+        sequenceIdx: Int,
+        end: Boolean
     ) {
         kafkaTemplate.send(
             MessageBuilder.withPayload(Event(
-                requestLogId = requestLog.id,
-                applicantId = applicantId
+                requestLogId = requestLogId,
+                applicantId = applicantId,
+                sequenceIdx = sequenceIdx,
+                end = end
             ))
                 .setHeader(KafkaHeaders.TOPIC, Topic.REQUEST_BULK)
                 .build()
@@ -31,7 +35,9 @@ object Topic {
 
 class Event(
     val requestLogId: Long,
-    val applicantId: Int
+    val applicantId: Int,
+    val sequenceIdx: Int,
+    val end: Boolean
 ) {
 
 }

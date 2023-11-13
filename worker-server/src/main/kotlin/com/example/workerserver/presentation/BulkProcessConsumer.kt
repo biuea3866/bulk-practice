@@ -23,14 +23,16 @@ class BulkController(
             bulkProcessApplication.bulkProcess(
                 requestLogId = request.bulkRequestId,
                 applicantId = request.applicantId,
-                sequenceIdx = request.sequenceIdx
+                sequenceIdx = request.sequenceIdx,
+                end = request.end
             )
         } catch(e: Exception) {
             bulkProcessApplication.failProcess(
                 requestLogId = request.bulkRequestId,
                 applicantId = request.applicantId,
                 sequenceIdx = request.sequenceIdx,
-                failReason = e.message
+                failReason = e.message,
+                end = request.end
             )
         } finally {
             acknowledgment.acknowledge()
@@ -41,7 +43,8 @@ class BulkController(
 data class ProcessBulk(
     val bulkRequestId: Long,
     val applicantId: Int,
-    val sequenceIdx: Int
+    val sequenceIdx: Int,
+    val end: Boolean
 )
 
 object Topic {

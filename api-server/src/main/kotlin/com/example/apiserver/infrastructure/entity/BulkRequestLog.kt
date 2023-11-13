@@ -10,6 +10,9 @@ class BulkRequestLog(
     @Id
     val id: Long,
 
+    @Column(name = "total_count")
+    val totalCount: Int,
+
     @Column(name = "start_date")
     val startDate: ZonedDateTime,
 

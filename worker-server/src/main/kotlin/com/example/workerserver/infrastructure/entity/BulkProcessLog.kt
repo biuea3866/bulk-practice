@@ -33,7 +33,9 @@ class BulkProcessLog(
     @Column(name = "end_date")
     var endDate: ZonedDateTime?,
 ) {
-    fun end() {
+    fun end(): BulkProcessLog {
         this.endDate = ZonedDateTime.now()
+
+        return this
     }
 }
