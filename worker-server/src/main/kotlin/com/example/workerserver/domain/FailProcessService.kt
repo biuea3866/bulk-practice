@@ -28,9 +28,23 @@ class FailProcessService(
             endDate = null
         )
 
-        if (sequenceIdx % 10 == 0) redisPublisher.publish()
+        if (sequenceIdx % 10 == 0) {
+            redisPublisher.publish(
+                BulkPublishMessage.fail(
+                    requestLogId = requestLogId,
+                    processCount = sequenceIdx
+                )
+            )
+        }
 
-        if (end) redisPublisher.publish()
+        if (end) {
+            redisPublisher.publish(
+                BulkPublishMessage.fail(
+                    requestLogId = requestLogId,
+                    processCount = sequenceIdx
+                )
+            )
+        }
 
         bulkProcessLogRepository.save(processLog.end())
     }

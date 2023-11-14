@@ -28,10 +28,20 @@ class BulkProcessService(
         )
 
         if (sequenceIdx % 10 == 0) {
-            redisPublisher.publish()
+            redisPublisher.publish(BulkPublishMessage.success(
+                requestLogId = requestLogId,
+                processCount = sequenceIdx
+            ))
         }
 
-        if (end) redisPublisher.publish()
+        if (end) {
+            redisPublisher.publish(
+                BulkPublishMessage.success(
+                    requestLogId = requestLogId,
+                    processCount = sequenceIdx
+                )
+            )
+        }
 
         bulkProcessLogRepository.save(processLog.end())
     }
