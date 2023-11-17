@@ -2,6 +2,7 @@ package com.example.workerserver.presentation
 
 import com.example.workerserver.application.BulkProcessApplication
 import com.example.workerserver.presentation.GroupId.BULK_PROCESS_GROUP
+import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.messaging.handler.annotation.Payload
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component
 class BulkController(
     private val bulkProcessApplication: BulkProcessApplication
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     @KafkaListener(
         topics = [Topic.BULK_REQUEST],
         groupId = BULK_PROCESS_GROUP
@@ -19,6 +22,8 @@ class BulkController(
         @Payload request: ProcessBulk,
         acknowledgment: Acknowledgment
     ) {
+        logger.info("bulkRequest: $request")
+
         try {
             bulkProcessApplication.bulkProcess(
                 requestLogId = request.bulkRequestId,
@@ -48,7 +53,7 @@ data class ProcessBulk(
 )
 
 object Topic {
-    const val BULK_REQUEST = "bulk-request"
+    const val BULK_REQUEST = "request-bulk"
 }
 
 object GroupId {

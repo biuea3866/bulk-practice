@@ -1,8 +1,13 @@
 package com.example.workerserver.domain
 
-class BulkPublishMessage(
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class BulkPublishMessage(
+    @JsonProperty("success")
     val success: Boolean,
+    @JsonProperty("requestLogId")
     val requestLogId: Long,
+    @JsonProperty("processCount")
     val processCount: Int
 ) {
     companion object {

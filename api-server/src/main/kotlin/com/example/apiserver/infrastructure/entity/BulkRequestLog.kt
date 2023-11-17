@@ -6,8 +6,8 @@ import javax.persistence.*
 @Entity
 @Table(name = "BulkRequestLog")
 class BulkRequestLog(
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
     @Column(name = "total_count")

@@ -18,7 +18,7 @@ class FailProcessService(
         failReason: String?,
         end: Boolean
     ) {
-        val processLog = BulkProcessLog(
+        val processLog = bulkProcessLogRepository.save(BulkProcessLog(
             id = 0,
             bulkActionRequestId = requestLogId,
             sequenceIdx = sequenceIdx,
@@ -26,25 +26,32 @@ class FailProcessService(
             success = false,
             startDate = ZonedDateTime.now(),
             endDate = null
+        ))
+
+//        if (sequenceIdx % 10 == 0) {
+//            redisPublisher.publish(
+//                BulkPublishMessage.fail(
+//                    requestLogId = requestLogId,
+//                    processCount = sequenceIdx
+//                )
+//            )
+//        }
+//
+//        if (end) {
+//            redisPublisher.publish(
+//                BulkPublishMessage.fail(
+//                    requestLogId = requestLogId,
+//                    processCount = sequenceIdx
+//                )
+//            )
+//        }
+
+        redisPublisher.publish(
+            BulkPublishMessage.fail(
+                requestLogId = requestLogId,
+                processCount = sequenceIdx
+            )
         )
-
-        if (sequenceIdx % 10 == 0) {
-            redisPublisher.publish(
-                BulkPublishMessage.fail(
-                    requestLogId = requestLogId,
-                    processCount = sequenceIdx
-                )
-            )
-        }
-
-        if (end) {
-            redisPublisher.publish(
-                BulkPublishMessage.fail(
-                    requestLogId = requestLogId,
-                    processCount = sequenceIdx
-                )
-            )
-        }
 
         bulkProcessLogRepository.save(processLog.end())
     }

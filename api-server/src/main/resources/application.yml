@@ -20,3 +20,10 @@ spring:
           plan_parameter_metadata_max_size: 16
         default_batch_fetch_size: 30
         jdbc.time_zone: UTC
+  kafka:
+    bootstrap-servers: localhost:29092
+  redis:
+    host: localhost
+    port: 6379
+server:
+  port: 50001
