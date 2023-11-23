@@ -1,9 +1,13 @@
 package com.example.apiserver.presentation
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter
 import org.springframework.messaging.simp.SimpMessageSendingOperations
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
 import java.io.ObjectInput
@@ -13,30 +17,23 @@ import java.io.Serializable
 @Component
 class RedisInternalSubscriber(
     val objectMapper: ObjectMapper,
-    private val simpleSendingOperations: SimpMessageSendingOperations
-): MessageListener {
+    private val messagingTemplate: SimpMessagingTemplate
+): MessageListenerAdapter() {
     override fun onMessage(message: Message, pattern: ByteArray?) {
-        val bulkMessage = fromByteArray<BulkPublishMessage>(message.body)
+        val bulkMessage: BulkPublishMessage = Gson().fromJson(message.body.toString(Charsets.UTF_8), BulkPublishMessage::class.java)
         println("message: ${bulkMessage}")
         println("topic: ${message.channel}")
-        simpleSendingOperations.convertAndSend(
+        println("destination: ${"/sub/bulk/${bulkMessage.requestLogId}"}")
+        messagingTemplate.convertAndSend(
             "/sub/bulk/${bulkMessage.requestLogId}",
-            bulkMessage
+            bulkMessage.processCount.toString()
         )
     }
 }
 
-fun <T> fromByteArray(byteArray: ByteArray): T {
-    val byteArrayInputStream = ByteArrayInputStream(byteArray)
-    val objectInput: ObjectInput = ObjectInputStream(byteArrayInputStream)
-    val result = objectInput.readObject() as T
-    objectInput.close()
-    byteArrayInputStream.close()
-    return result
+data class BulkPublishMessage (
+    @JsonProperty("success") val success: Boolean,
+    @JsonProperty("requestLogId") val requestLogId: Long,
+    @JsonProperty("processCount") val processCount: Int
+) {
 }
-
-data class BulkPublishMessage(
-    val success: Boolean,
-    val requestLogId: Long,
-    val processCount: Int
-)
