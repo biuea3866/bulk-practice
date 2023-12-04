@@ -1,7 +1,7 @@
 package com.example.apiserver.infrastructure.entity
 
+import jakarta.persistence.*
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
 @Table(name = "BulkRequestLog")

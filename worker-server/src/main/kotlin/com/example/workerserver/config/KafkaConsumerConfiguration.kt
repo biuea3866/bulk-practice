@@ -26,9 +26,9 @@ class KafkaConsumerConfiguration {
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false,
         )
         val consumerFactory = DefaultKafkaConsumerFactory<String, Any>(config)
-
         val factory = ConcurrentKafkaListenerContainerFactory<String, Any>()
-        factory.setMessageConverter(JsonMessageConverter())
+
+        factory.setRecordMessageConverter(JsonMessageConverter())
         factory.consumerFactory = consumerFactory
         factory.setConcurrency(1)
         factory.containerProperties.ackMode = ContainerProperties.AckMode.MANUAL

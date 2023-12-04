@@ -1,3 +1,4 @@
+# docker-compose -f docker-compose.yml up --build -d
 version: '3'
 services:
   mysql_container:

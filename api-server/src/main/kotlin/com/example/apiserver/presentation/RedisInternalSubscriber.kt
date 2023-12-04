@@ -17,15 +17,15 @@ import java.io.Serializable
 @Component
 class RedisInternalSubscriber(
     val objectMapper: ObjectMapper,
-    private val messagingTemplate: SimpMessagingTemplate
+    private val simpleSendingOperations: SimpMessagingTemplate
 ): MessageListenerAdapter() {
     override fun onMessage(message: Message, pattern: ByteArray?) {
         val bulkMessage: BulkPublishMessage = Gson().fromJson(message.body.toString(Charsets.UTF_8), BulkPublishMessage::class.java)
         println("message: ${bulkMessage}")
         println("topic: ${message.channel}")
         println("destination: ${"/sub/bulk/${bulkMessage.requestLogId}"}")
-        messagingTemplate.convertAndSend(
-            "/sub/bulk/${bulkMessage.requestLogId}",
+        simpleSendingOperations.convertAndSend(
+            "/bulk/${bulkMessage.requestLogId}",
             bulkMessage.processCount.toString()
         )
     }

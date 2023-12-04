@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bulk-action-practice.iml" filepath="$PROJECT_DIR$/.idea/bulk-action-practice.iml" />
-      <module fileurl="file://$PROJECT_DIR$/socket-server.iml" filepath="$PROJECT_DIR$/socket-server.iml" />
     </modules>
   </component>
 </project>
