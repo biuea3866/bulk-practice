@@ -22,7 +22,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("io.netty:netty-all:4.1.94.Final")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
