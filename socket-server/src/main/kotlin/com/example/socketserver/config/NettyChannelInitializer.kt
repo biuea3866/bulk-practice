@@ -8,7 +8,12 @@ import org.springframework.stereotype.Component
 class NettyChannelInitializer(
     private val testHandler: TestHandler
 ): ChannelInitializer<SocketChannel>() {
+    // 클라이언트 소켓 채널이 생성될 때 호출
     override fun initChannel(ch: SocketChannel) {
-        ch.pipeline().addLast(testHandler)
+        val pipeline = ch.pipeline()
+        val testDecoder = TestDecoder()
+
+        pipeline.addLast(testHandler)
+        pipeline.addLast(testDecoder)
     }
 }
